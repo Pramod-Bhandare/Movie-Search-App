@@ -1,53 +1,58 @@
-const APIURL =
-  "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1";
 
-const IMGPATH = "https://image.tmdb.org/t/p/w1280";
+const API_KEY = "https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&query=Inception&page=1";
 
-const SEARCHAPI =
-  "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=";
+const APIURL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+const IMGPATH = "https://image.tmdb.org/t/p/w500";
+const SEARCHAPI = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=`;
 
 const movieBox = document.querySelector("#movie-box");
 
-// Fetch movies from API
+// Fetch movies
 const getMovies = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
-  showMovies(data);
+  showMovies(data.results);
 };
 
-// Show movies on screen
-const showMovies = (data) => {
+// Display movies
+const showMovies = (movies) => {
   movieBox.innerHTML = "";
-  data.results.forEach((result) => {
-    const imagePath =
-      result.poster_path === null
-        ? "img/image-missing.png"
-        : IMGPATH + result.poster_path;
 
-    const box = document.createElement("div");
-    box.classList.add("box");
-    box.innerHTML = `
-      <img src="${imagePath}" alt="${result.original_title}" />
-      <div class="overlay">
-        <div class="title"> 
-          <h2>${result.original_title}</h2>
-          <span>${result.vote_average}</span>
-        </div>
-        <h3>Overview:</h3>
-        <p>${result.overview}</p>
+  if (!movies || movies.length === 0) {
+    movieBox.innerHTML = `<h2>No results found ❌</h2>`;
+    return;
+  }
+
+  movies.forEach((movie) => {
+    const imagePath = movie.poster_path
+      ? IMGPATH + movie.poster_path
+      : "img/image-missing.png";
+
+    const movieCard = document.createElement("div");
+    movieCard.classList.add("movie-card");
+
+    movieCard.innerHTML = `
+      <img src="${imagePath}" alt="${movie.title}">
+      <div class="movie-info">
+        <h2>${movie.title}</h2>
+        <p>${movie.overview || "No overview available."}</p>
+        <span class="rating">⭐ ${movie.vote_average}</span>
       </div>
     `;
-    movieBox.appendChild(box);
+
+    movieBox.appendChild(movieCard);
   });
 };
 
 // Initial load
 getMovies(APIURL);
 
-// Search functionality
-document.querySelector("#search").addEventListener("keyup", function (event) {
-  if (event.target.value !== "") {
-    getMovies(SEARCHAPI + event.target.value);
+// Search movies
+document.querySelector("#search").addEventListener("keyup", (e) => {
+  const searchValue = e.target.value.trim();
+
+  if (searchValue) {
+    getMovies(SEARCHAPI + searchValue);
   } else {
     getMovies(APIURL);
   }

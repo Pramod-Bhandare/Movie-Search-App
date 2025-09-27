@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="main">
-        <div class="row" style="justify-content: center;">
-            <input type="search" id="search" autofocus autocomplete="off" placeholder="Search here..." />
-        </div>
-        <div class="row" id="movie-box">
+  <header>
+    <h1>🎬 Movie Search App</h1>
+    <input type="search" id="search" placeholder="Search movies..." autocomplete="off">
+  </header>
 
-        </div>
-    </div>
-    <script src="js/app.js"></script>
+  <main>
+    <div class="movie-container" id="movie-box"></div>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ by Pramod</p>
+  </footer>
+
+  <script src="js/app.js"></script>
 </body>
-
 </html>
